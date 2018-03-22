@@ -76,7 +76,9 @@ def login():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data))
 
-        cur = mysql.connection.cursor()
+        #cur = mysql.connection.cursor()
+        flash('You are now logged in!')
+        redirect(url_for('index'))
 
     return render_template('login.html', form=form)
 
