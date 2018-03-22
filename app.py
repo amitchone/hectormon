@@ -77,10 +77,10 @@ def get_divs():
 
 @app.route('/')
 @is_logged_in
-def home():
+def dashboard():
     Divs = get_divs()
     Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.gmtime())
-    return render_template('home.html', environmentals=Environmentals, divs=Divs)
+    return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
 
 
 @app.route('/logout')
@@ -109,7 +109,7 @@ def login():
                 session['logged_in'] = True
                 session['username'] = username
                 cur.close()
-                return redirect(url_for('home'))
+                return redirect(url_for('dashboard'))
             else:
                 error = 'Incorrect password'
                 cur.close()
