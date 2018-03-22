@@ -142,4 +142,4 @@ class LoginForm(Form):
 
 if __name__ == '__main__':
     app.secret_key = 'secret123'
-    app.run(host='192.168.0.5', debug=True)
+    app.run(host='192.168.0.15', debug=True)
