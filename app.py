@@ -1,5 +1,6 @@
 import getpass, time
 
+from functools import wraps
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
@@ -13,13 +14,24 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = 'focusRITE339'
 app.config['MYSQL_DB'] = 'hectormon'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
 Environmentals = Environmentals()
+
+
+def is_logged_in(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('You do not have permission to do that.', 'danger')
+            return redirect(url_for('login'))
+    return wrap
 
 
 def get_divs():
@@ -64,10 +76,18 @@ def get_divs():
 
 
 @app.route('/')
+@is_logged_in
 def home():
     Divs = get_divs()
     Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.gmtime())
     return render_template('home.html', environmentals=Environmentals, divs=Divs)
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You are now logged out.', 'success')
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
