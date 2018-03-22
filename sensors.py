@@ -47,8 +47,16 @@ def update_data():
     camera.close()
     del camera
 
+    data = ser_read()
+    return {'ctemp': data[0], 'chum': data[1], 'htemp': data[2], 'hhum': data[3], 'uv': 7}
+
 
 def ser_read():
     ser = serial.Serial('/dev/ttyACM0', 9600)
+
     while True:
-        print ser.readline()
+        data = ser.readline().split(',')
+
+        if len(data) == 4:
+            del ser
+            return data

@@ -1,4 +1,4 @@
-import getpass, time, thread
+import getpass, time
 
 from functools import wraps
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
@@ -6,7 +6,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from data import Environmentals
-from sensors import toggle_lamp_on, toggle_lamp_off, update_data, ser_read
+from sensors import toggle_lamp_on, toggle_lamp_off, update_data
 
 
 app = Flask(__name__)
@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = getpass.getpass()
+app.config['MYSQL_PASSWORD'] = 'focusRITE339'
 app.config['MYSQL_DB'] = 'hectormon'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
@@ -63,7 +63,7 @@ def update():
     return redirect(url_for('dashboard'))
 
 
-def get_divs():
+def get_divs(Environmentals):
     Divs = dict()
 
     if Environmentals['ctemp'] >= 18.0 and Environmentals['ctemp'] <= 25.0:
@@ -107,8 +107,9 @@ def get_divs():
 @app.route('/')
 @is_logged_in
 def dashboard():
-    Divs = get_divs()
+    Environmentals = update_data()
     Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.gmtime())
+    Divs = get_divs(Environmentals)
     return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
 
 
@@ -159,7 +160,4 @@ class LoginForm(Form):
 
 if __name__ == '__main__':
     app.secret_key = '6hb4FGh7ja1sdd4'
-
-    thread.start_new_thread(ser_read, ())
-    thread.start_new_thread(app.run(host='192.168.0.15', debug=True), ())
-    #app.run(host='192.168.0.15', debug=True)
+    app.run(host='192.168.0.15', debug=True)
