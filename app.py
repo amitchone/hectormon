@@ -1,6 +1,12 @@
-from flask import Flask, render_template
+import time
+
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
+from flask_mysqldb import MySQL
+from wtforms import Form, StringField, PasswordField, validators
+from passlib.hash import sha256_crypt
 from data import Environmentals
 
+#TODO: Install mysql on rpi: sudo apt-get install mysql-server libmysqlcient-dev
 
 app = Flask(__name__)
 
@@ -52,8 +58,27 @@ def get_divs():
 @app.route('/')
 def home():
     Divs = get_divs()
-    print Environmentals
+    Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.gmtime())
     return render_template('home.html', environmentals=Environmentals, divs=Divs)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        pass
+    
+    return render_template('login.html')
+
+
+
+class LoginForm(Form):
+    username = StringField('Username', [validators.length(max=50)])
+    password = PasswordField('Password', [validators.DataRequired(),
+                                          validators.EqualTo('confirm', message='Passwords do not match!')
+                                         ])
+    confirm = PasswordField('Confirm password')
 
 
 if __name__ == '__main__':
