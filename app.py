@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_PASSWORD'] = getpass.getpass()
 app.config['MYSQL_DB'] = 'hectormon'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
@@ -31,6 +31,19 @@ def is_logged_in(f):
             flash('You do not have permission to do that.', 'danger')
             return redirect(url_for('login'))
     return wrap
+
+
+@app.route('/lamp')
+@is_logged_in
+def lamp():
+    print 'lamp lamp baby'
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/update')
+def update():
+    print 'update update baby'
+    return redirect(url_for('dashboard'))
 
 
 def get_divs():

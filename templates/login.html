@@ -3,18 +3,26 @@
 {% block body %}
 <p></p>
 <div class="jumbotron">
-  <body class="text-center">
-    <h1>Login</h1>
-    {% from "includes/_formhelpers.html" import render_field %}
-    <form method="POST" action="">
-      <div class="form-group">
-        {{ render_field(form.username, class_="form-control") }}
-      </div>
-      <div class="form-group">
-        {{ render_field(form.password, class_="form-control") }}
-      </div>
-      <p><input class="btn btn-primary" type="submit" value="Submit"></p>
-    </form>
-  </body>
+  <div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+      <body class="text-center">
+        <h1>Login</h1>
+        {% from "includes/_formhelpers.html" import render_field %}
+        <form method="POST" action="">
+          <div class="form-group">
+            {{ render_field(form.username, class_="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ render_field(form.password, class_="form-control") }}
+          </div>
+          <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+        </form>
+      </body>
+    </div>
+    <div class="col-sm-4">
+    </div>
+  </div>
 </div>
 {% endblock %}
