@@ -1,4 +1,4 @@
-import getpass, time
+import getpass, time, thread
 
 from functools import wraps
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
@@ -6,7 +6,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from data import Environmentals
-from sensors import toggle_lamp_on, toggle_lamp_off, picture
+from sensors import toggle_lamp_on, toggle_lamp_off, update_data, ser_read
 
 
 app = Flask(__name__)
@@ -59,7 +59,7 @@ def lamp_off():
 
 @app.route('/update')
 def update():
-    picture()
+    update_data()
     return redirect(url_for('dashboard'))
 
 
@@ -158,5 +158,8 @@ class LoginForm(Form):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'secret123'
-    app.run(host='192.168.0.15', debug=True)
+    app.secret_key = '6hb4FGh7ja1sdd4'
+
+    thread.start_new_thread(ser_read, ())
+    thread.start_new_thread(app.run(host='192.168.0.15', debug=True))
+    #app.run(host='192.168.0.15', debug=True)
