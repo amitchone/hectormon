@@ -161,5 +161,5 @@ if __name__ == '__main__':
     app.secret_key = '6hb4FGh7ja1sdd4'
 
     thread.start_new_thread(ser_read, ())
-    thread.start_new_thread(app.run(host='192.168.0.15', debug=True))
+    thread.start_new_thread(app.run(host='192.168.0.15', debug=True), ())
     #app.run(host='192.168.0.15', debug=True)
