@@ -1,5 +1,6 @@
 echo Installing required packages for Hectormon
 echo
+sudo apt-get install mysql-server libmysqlclient-dev
 pip install virtualenv
 cd ..
 virtualenv venv
