@@ -67,10 +67,9 @@ def login():
     form = LoginForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        pass
-    
-    return render_template('login.html')
+        return render_template('login.html', form=form)
 
+    return render_template('login.html', form=form)
 
 
 class LoginForm(Form):
