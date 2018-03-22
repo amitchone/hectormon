@@ -1,4 +1,4 @@
-import time
+import getpass, time
 
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
 from flask_mysqldb import MySQL
@@ -6,9 +6,15 @@ from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from data import Environmentals
 
-#TODO: Install mysql on rpi: sudo apt-get install mysql-server libmysqlcient-dev
+#TODO: Install mysql on rpi: sudo apt-get install mysql-server libmysqlclient-dev
 
 app = Flask(__name__)
+app.config['MySQL_HOST'] = 'localhost'
+app.config['MySQL_USER'] = 'root'
+app.config['MySQL_PASSWORD'] = getpass.getpass()
+app.config['MySQL_DB'] = 'users'
+app.config['MySQL_CURSORCLASS'] = 'DictCursor'
+mysql = MySQL(app)
 
 
 Environmentals = Environmentals()
@@ -73,11 +79,8 @@ def login():
 
 
 class LoginForm(Form):
-    username = StringField('Username', [validators.length(max=50)])
-    password = PasswordField('Password', [validators.DataRequired(),
-                                          validators.EqualTo('confirm', message='Passwords do not match!')
-                                         ])
-    confirm = PasswordField('Confirm password')
+    username = StringField('Username', [validators.DataRequired()])
+    password = PasswordField('Password', [validators.DataRequired()])
 
 
 if __name__ == '__main__':
