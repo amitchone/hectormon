@@ -1,11 +1,11 @@
-.jumbotron {
-    padding-left: 0px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-}
-
 .container .jumbotron {
     padding-left: 0px;
     padding-top: 3px;
-    padding-bottom: 3px;
+    padding-bottom: 12px;
+}
+
+.jumbotron {
+    padding-left: 0px;
+    padding-top: 3px;
+    padding-bottom: 12px;
 }

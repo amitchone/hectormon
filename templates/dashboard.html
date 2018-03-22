@@ -23,9 +23,14 @@
           <div class="{{ divs.hhum }}" role="alert">
             <p><b>Basking Humidity:</b> {{ environmentals.hhum }}%</p>
           </div>
+          <div class="text-center">
+            <button type"button" class="btn btn-primary">Update Data</button>
+            <p></p>
+            <button type"button" class="btn btn-primary">Toggle Lamp</button>
+          </div>
         </div>
         <div class="col-sm-9">
-          Hello
+          <img src="{{url_for('static', filename='images/image.jpg')}}" class="img-fluid mx-auto d-block">
         </div>
       </div>
     </div>

@@ -7,14 +7,13 @@ from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from data import Environmentals
 
-#TODO: Install mysql on rpi: sudo apt-get install mysql-server libmysqlclient-dev
 
 app = Flask(__name__)
 
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'focusRITE339'
+app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'hectormon'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
