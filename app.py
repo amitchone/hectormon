@@ -5,7 +5,6 @@ from flask import Flask, render_template, flash, redirect, url_for, session, log
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
-from data import Environmentals
 from sensors import toggle_lamp_on, toggle_lamp_off, update_data
 
 
@@ -14,13 +13,10 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'focusRITE339'
+app.config['MYSQL_PASSWORD'] = getpass.getpass()
 app.config['MYSQL_DB'] = 'hectormon'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
-
-
-Environmentals = Environmentals()
 
 
 @app.after_request
@@ -46,6 +42,7 @@ def is_logged_in(f):
 @app.route('/lamp_on')
 @is_logged_in
 def lamp_on():
+    print 'TURN ON'
     toggle_lamp_on()
     return redirect(url_for('dashboard'))
 
@@ -160,4 +157,4 @@ class LoginForm(Form):
 
 if __name__ == '__main__':
     app.secret_key = '6hb4FGh7ja1sdd4'
-    app.run(host='192.168.0.15', debug=True)
+    app.run(host='192.168.0.15',port=80, debug=True)
