@@ -6,6 +6,7 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from data import Environmentals
+from sensors import toggle_lamp_on, toggle_lamp_off, picture
 
 
 app = Flask(__name__)
@@ -22,6 +23,15 @@ mysql = MySQL(app)
 Environmentals = Environmentals()
 
 
+@app.after_request
+def add_header(r):
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
+
 def is_logged_in(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -33,16 +43,23 @@ def is_logged_in(f):
     return wrap
 
 
-@app.route('/lamp')
+@app.route('/lamp_on')
 @is_logged_in
-def lamp():
-    print 'lamp lamp baby'
+def lamp_on():
+    toggle_lamp_on()
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/lamp_off')
+@is_logged_in
+def lamp_off():
+    toggle_lamp_off()
     return redirect(url_for('dashboard'))
 
 
 @app.route('/update')
 def update():
-    print 'update update baby'
+    picture()
     return redirect(url_for('dashboard'))
 
 
