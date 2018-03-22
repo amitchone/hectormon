@@ -73,7 +73,10 @@ def login():
     form = LoginForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        return render_template('login.html', form=form)
+        username = form.username.data
+        password = sha256_crypt.encrypt(str(form.password.data))
+
+        cur = mysql.connection.cursor()
 
     return render_template('login.html', form=form)
 
