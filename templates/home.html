@@ -1,8 +1,31 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="jumbotron">
-<h1 class="display-4">Hello, world!</h1>
-<p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-</div>
+  <div class="jumbotron">
+    <h1 class="display-4">Statistics @ {{ environmentals.timestamp }}</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="{{ divs.ctemp }}" role="alert">
+            <p><b>Cool Temp:</b> {{ environmentals.ctemp }}&deg;C</p>
+          </div>
+          <div class="{{ divs.htemp }}" role="alert">
+            <p><b>Basking Temp:</b> {{ environmentals.htemp }}&deg;C</p>
+          </div>
+          <div class="{{ divs.uv }}" role="alert">
+            <p><b>UV Index:</b> {{ environmentals.uv }}</p>
+          </div>
+          <div class="{{ divs.chum }}" role="alert">
+            <p><b>Cool Humidity:</b> {{ environmentals.chum }}%</p>
+          </div>
+          <div class="{{ divs.hhum }}" role="alert">
+            <p><b>Basking Humidity:</b> {{ environmentals.hhum }}%</p>
+          </div>
+        </div>
+        <div class="col-sm-9">
+          Hello
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
