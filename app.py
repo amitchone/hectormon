@@ -9,11 +9,13 @@ from data import Environmentals
 #TODO: Install mysql on rpi: sudo apt-get install mysql-server libmysqlclient-dev
 
 app = Flask(__name__)
-app.config['MySQL_HOST'] = 'localhost'
-app.config['MySQL_USER'] = 'root'
-app.config['MySQL_PASSWORD'] = getpass.getpass()
-app.config['MySQL_DB'] = 'users'
-app.config['MySQL_CURSORCLASS'] = 'DictCursor'
+
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'hectormon'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
@@ -73,12 +75,30 @@ def login():
     form = LoginForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        username = form.username.data
-        password = sha256_crypt.encrypt(str(form.password.data))
+        username = request.form['username']
+        password_candidate = request.form['password']
 
-        #cur = mysql.connection.cursor()
-        flash('You are now logged in!')
-        redirect(url_for('index'))
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
+
+        if result > 0:
+            data = cur.fetchone()
+            password = data['password']
+
+            if sha256_crypt.verify(password_candidate, password):
+                session['logged_in'] = True
+                session['username'] = username
+                cur.close()
+                return redirect(url_for('home'))
+            else:
+                error = 'Incorrect password'
+                cur.close()
+                return render_template('login.html', error=error, form=form)
+
+        else:
+            error = 'Username not found: {0}'.format(username)
+            cur.close()
+            return render_template('login.html', error=error, form=form)
 
     return render_template('login.html', form=form)
 
@@ -89,4 +109,5 @@ class LoginForm(Form):
 
 
 if __name__ == '__main__':
+    app.secret_key = 'secret123'
     app.run(host='192.168.0.5', debug=True)
