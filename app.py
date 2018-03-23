@@ -63,37 +63,37 @@ def update():
 def get_divs(Environmentals):
     Divs = dict()
 
-    if float(Environmentals['ctemp']) >= 18.0 and float(Environmentals['ctemp']) <= 25.0:
+    if float(Environmentals['ctemp']) >= 18.0 and float(Environmentals['ctemp']) <= 28.0:
         Divs['ctemp'] = "alert alert-success"
-    elif float(Environmentals['ctemp']) < 18.0 and float(Environmentals['ctemp']) >= 16.0:
+    elif float(Environmentals['ctemp']) < 18.0 and float(Environmentals['ctemp']) >= 15.0:
         Divs['ctemp'] = "alert alert-warning"
     else:
         Divs['ctemp'] = "alert alert-danger"
 
-    if float(Environmentals['htemp']) >= 28.0 and float(Environmentals['htemp']) <= 38.0:
+    if float(Environmentals['htemp']) >= 28.0 and float(Environmentals['htemp']) <= 39.0:
         Divs['htemp'] = "alert alert-success"
     elif float(Environmentals['htemp']) < 28.0 and float(Environmentals['htemp']) >= 26.0:
         Divs['htemp'] = "alert alert-warning"
     else:
         Divs['htemp'] = "alert alert-danger"
 
-    if int(Environmentals['uv']) >= 7 and int(Environmentals['uv']) <= 11:
+    if int(Environmentals['uv']) >= 5 and int(Environmentals['uv']) <= 11:
         Divs['uv'] = "alert alert-success"
-    elif int(Environmentals['uv']) < 7 and int(Environmentals['uv']) >= 5:
+    elif int(Environmentals['uv']) < 5 and int(Environmentals['uv']) >= 3:
         Divs['uv'] = "alert alert-warning"
     else:
         Divs['uv'] = "alert alert-danger"
 
-    if float(Environmentals['chum']) >= 28.0 and float(Environmentals['chum']) <= 38.0:
+    if float(Environmentals['chum']) >= 20.0 and float(Environmentals['chum']) <= 50.0:
         Divs['chum'] = "alert alert-success"
-    elif float(Environmentals['chum']) < 28.0 and float(Environmentals['chum']) >= 26.0:
+    elif float(Environmentals['chum']) < 20.0 and float(Environmentals['chum']) >= 15.0:
         Divs['chum'] = "alert alert-warning"
     else:
         Divs['chum'] = "alert alert-danger"
 
-    if float(Environmentals['hhum']) >= 28.0 and float(Environmentals['hhum']) <= 38.0:
+    if float(Environmentals['hhum']) >= 20.0 and float(Environmentals['hhum']) <= 50.0:
         Divs['hhum'] = "alert alert-success"
-    elif float(Environmentals['hhum']) < 28.0 and float(Environmentals['hhum']) >= 26.0:
+    elif float(Environmentals['hhum']) < 20.0 and float(Environmentals['hhum']) >= 15.0:
         Divs['hhum'] = "alert alert-warning"
     else:
         Divs['hhum'] = "alert alert-danger"
