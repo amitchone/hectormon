@@ -56,49 +56,58 @@ def lamp_off():
 
 @app.route('/update')
 def update():
-    update_data()
     return redirect(url_for('dashboard'))
 
 
 def get_divs(Environmentals):
     Divs = dict()
 
-    if float(Environmentals['ctemp']) >= 18.0 and float(Environmentals['ctemp']) <= 28.0:
-        Divs['ctemp'] = "alert alert-success"
-    elif float(Environmentals['ctemp']) < 18.0 and float(Environmentals['ctemp']) >= 15.0:
-        Divs['ctemp'] = "alert alert-warning"
-    else:
-        Divs['ctemp'] = "alert alert-danger"
+    if Environmentals['parity']:
 
-    if float(Environmentals['htemp']) >= 28.0 and float(Environmentals['htemp']) <= 39.0:
-        Divs['htemp'] = "alert alert-success"
-    elif float(Environmentals['htemp']) < 28.0 and float(Environmentals['htemp']) >= 26.0:
-        Divs['htemp'] = "alert alert-warning"
-    else:
-        Divs['htemp'] = "alert alert-danger"
+        if float(Environmentals['ctemp']) >= 18.0 and float(Environmentals['ctemp']) <= 28.0:
+            Divs['ctemp'] = "alert alert-success"
+        elif float(Environmentals['ctemp']) < 18.0 and float(Environmentals['ctemp']) >= 15.0:
+            Divs['ctemp'] = "alert alert-warning"
+        else:
+            Divs['ctemp'] = "alert alert-danger"
 
-    if int(Environmentals['uv']) >= 5 and int(Environmentals['uv']) <= 11:
-        Divs['uv'] = "alert alert-success"
-    elif int(Environmentals['uv']) < 5 and int(Environmentals['uv']) >= 3:
-        Divs['uv'] = "alert alert-warning"
-    else:
-        Divs['uv'] = "alert alert-danger"
+        if float(Environmentals['htemp']) >= 28.0 and float(Environmentals['htemp']) <= 39.0:
+            Divs['htemp'] = "alert alert-success"
+        elif float(Environmentals['htemp']) < 28.0 and float(Environmentals['htemp']) >= 26.0:
+            Divs['htemp'] = "alert alert-warning"
+        else:
+            Divs['htemp'] = "alert alert-danger"
 
-    if float(Environmentals['chum']) >= 20.0 and float(Environmentals['chum']) <= 50.0:
-        Divs['chum'] = "alert alert-success"
-    elif float(Environmentals['chum']) < 20.0 and float(Environmentals['chum']) >= 15.0:
-        Divs['chum'] = "alert alert-warning"
-    else:
-        Divs['chum'] = "alert alert-danger"
+        if int(Environmentals['uv']) >= 5 and int(Environmentals['uv']) <= 11:
+            Divs['uv'] = "alert alert-success"
+        elif int(Environmentals['uv']) < 5 and int(Environmentals['uv']) >= 3:
+            Divs['uv'] = "alert alert-warning"
+        else:
+            Divs['uv'] = "alert alert-danger"
 
-    if float(Environmentals['hhum']) >= 20.0 and float(Environmentals['hhum']) <= 50.0:
-        Divs['hhum'] = "alert alert-success"
-    elif float(Environmentals['hhum']) < 20.0 and float(Environmentals['hhum']) >= 15.0:
-        Divs['hhum'] = "alert alert-warning"
-    else:
-        Divs['hhum'] = "alert alert-danger"
+        if float(Environmentals['chum']) >= 20.0 and float(Environmentals['chum']) <= 50.0:
+            Divs['chum'] = "alert alert-success"
+        elif float(Environmentals['chum']) < 20.0 and float(Environmentals['chum']) >= 15.0:
+            Divs['chum'] = "alert alert-warning"
+        else:
+            Divs['chum'] = "alert alert-danger"
 
-    return Divs
+        if float(Environmentals['hhum']) >= 20.0 and float(Environmentals['hhum']) <= 50.0:
+            Divs['hhum'] = "alert alert-success"
+        elif float(Environmentals['hhum']) < 20.0 and float(Environmentals['hhum']) >= 15.0:
+            Divs['hhum'] = "alert alert-warning"
+        else:
+            Divs['hhum'] = "alert alert-danger"
+
+        return Divs
+
+    else:
+        return { 'ctemp': "alert alert-danger",
+                 'htemp': "alert alert-danger",
+                 'chum': "alert alert-danger",
+                 'hhum': "alert alert-danger",
+                 'uv': "alert alert-danger"
+               }
 
 
 @app.route('/')
@@ -107,7 +116,12 @@ def dashboard():
     Environmentals = update_data()
     Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.gmtime())
     Divs = get_divs(Environmentals)
-    return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
+
+    if Environmentals['parity']:
+        return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
+    else:
+        flash('Unable to read from sensors. Refresh page and try again. If unsuccessful check sensor connection.', 'danger')
+        return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
 
 
 @app.route('/logout')
