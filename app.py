@@ -97,6 +97,10 @@ def dashboard():
     Divs = get_divs(Environmentals)
 
     if Environmentals['parity']:
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO sensordata(ctemp, htemp, chum, hhum, uv) VALUES(%s, %s, %s, %s, %s);", [Environmentals['ctemp'], Environmentals['htemp'], Environmentals['chum'], Environmentals['hhum'], Environmentals['uv']])
+        mysql.connection.commit()
+        cur.close()
         return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
     else:
         flash('Unable to read from sensors. Refresh page and try again. If unsuccessful check sensor connection.', 'danger')
