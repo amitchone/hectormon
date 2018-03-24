@@ -59,45 +59,24 @@ def update():
     return redirect(url_for('dashboard'))
 
 
+def get_div(ref, low, mid, high):
+    if ref >= mid and ref <= high:
+        return "alert alert-success"
+    elif ref < mid and ref >= low:
+        return "alert alert-warning"
+    else:
+        return "alert alert-danger"
+
+
 def get_divs(Environmentals):
     Divs = dict()
 
     if Environmentals['parity']:
-
-        if float(Environmentals['ctemp']) >= 18.0 and float(Environmentals['ctemp']) <= 28.0:
-            Divs['ctemp'] = "alert alert-success"
-        elif float(Environmentals['ctemp']) < 18.0 and float(Environmentals['ctemp']) >= 15.0:
-            Divs['ctemp'] = "alert alert-warning"
-        else:
-            Divs['ctemp'] = "alert alert-danger"
-
-        if float(Environmentals['htemp']) >= 28.0 and float(Environmentals['htemp']) <= 39.0:
-            Divs['htemp'] = "alert alert-success"
-        elif float(Environmentals['htemp']) < 28.0 and float(Environmentals['htemp']) >= 26.0:
-            Divs['htemp'] = "alert alert-warning"
-        else:
-            Divs['htemp'] = "alert alert-danger"
-
-        if int(Environmentals['uv']) >= 5 and int(Environmentals['uv']) <= 11:
-            Divs['uv'] = "alert alert-success"
-        elif int(Environmentals['uv']) < 5 and int(Environmentals['uv']) >= 3:
-            Divs['uv'] = "alert alert-warning"
-        else:
-            Divs['uv'] = "alert alert-danger"
-
-        if float(Environmentals['chum']) >= 20.0 and float(Environmentals['chum']) <= 50.0:
-            Divs['chum'] = "alert alert-success"
-        elif float(Environmentals['chum']) < 20.0 and float(Environmentals['chum']) >= 15.0:
-            Divs['chum'] = "alert alert-warning"
-        else:
-            Divs['chum'] = "alert alert-danger"
-
-        if float(Environmentals['hhum']) >= 20.0 and float(Environmentals['hhum']) <= 50.0:
-            Divs['hhum'] = "alert alert-success"
-        elif float(Environmentals['hhum']) < 20.0 and float(Environmentals['hhum']) >= 15.0:
-            Divs['hhum'] = "alert alert-warning"
-        else:
-            Divs['hhum'] = "alert alert-danger"
+        Divs['ctemp'] = get_div(float(Environmentals['ctemp']), 15.0, 18.0, 28.0)
+        Divs['htemp'] = get_div(float(Environmentals['htemp']), 26.0, 28.0, 39.0)
+        Divs['uv'] = get_div(int(Environmentals['uv']), 3, 5, 11)
+        Divs['chum'] = get_div(float(Environmentals['chum']), 15.0, 20.0, 50.0)
+        Divs['hhum'] = get_div(float(Environmentals['hhum']), 15.0, 20.0, 50.0)
 
         return Divs
 
