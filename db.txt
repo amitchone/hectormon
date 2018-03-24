@@ -1,0 +1,23 @@
+DESCRIBE users;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| id       | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name     | varchar(100) | YES  |     | NULL    |                |
+| username | varchar(50)  | YES  |     | NULL    |                |
+| password | varchar(100) | YES  |     | NULL    |                |
+| email    | varchar(100) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+
+DESCRIBE sensordata;
++-----------+-----------+------+-----+-------------------+----------------+
+| Field     | Type      | Null | Key | Default           | Extra          |
++-----------+-----------+------+-----+-------------------+----------------+
+| id        | int(11)   | NO   | PRI | NULL              | auto_increment |
+| ctemp     | float     | YES  |     | NULL              |                |
+| htemp     | float     | YES  |     | NULL              |                |
+| chum      | float     | YES  |     | NULL              |                |
+| hhum      | float     | YES  |     | NULL              |                |
+| uv        | int(2)    | YES  |     | NULL              |                |
+| timestamp | timestamp | NO   |     | CURRENT_TIMESTAMP |                |
++-----------+-----------+------+-----+-------------------+----------------+
