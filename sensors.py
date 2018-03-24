@@ -52,7 +52,7 @@ def update_data():
 
 def temp_regex(temps):
     for temp in temps:
-        regex = re.search("\\b\d{2}[.]\d{2}\\b", temp)
+        regex = re.search("\A\d{2}[.]\d{2}\\b", temp)
 
         if regex is None:
             return False
