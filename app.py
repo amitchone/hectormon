@@ -93,7 +93,7 @@ def get_divs(Environmentals):
 @is_logged_in
 def dashboard():
     Environmentals = update_data()
-    Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.gmtime())
+    Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.localtime())
     Divs = get_divs(Environmentals)
 
     if Environmentals['parity']:

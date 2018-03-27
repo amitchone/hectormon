@@ -56,8 +56,6 @@ def temp_regex(temps):
 
         if regex is None:
             return False
-        elif len(temp) != 5:
-            return False
 
     return True
 
