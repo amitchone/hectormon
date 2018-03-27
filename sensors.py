@@ -65,6 +65,7 @@ def ser_read():
 
     for i in range(5):
         data = ser.readline().split(',')
+        data[-1] = data[-1][0:5]
 
         if len(data) == 4:
             if temp_regex(data):
