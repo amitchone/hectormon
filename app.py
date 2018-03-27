@@ -45,6 +45,12 @@ def lamp_on():
     session['lamp'] = 'On'
     session['lamp_div'] = "alert alert-success"
     session['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
+
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO lamptimes(status) VALUES(%s);", [session['lamp']])
+    mysql.connection.commit()
+    cur.close()
+
     toggle_lamp_on()
     return redirect(url_for('dashboard'))
 
@@ -55,6 +61,12 @@ def lamp_off():
     session['lamp'] = 'Off'
     session['lamp_div'] = "alert alert-danger"
     session['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
+
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO lamptimes(status) VALUES(%s);", [session['lamp']])
+    mysql.connection.commit()
+    cur.close()
+
     toggle_lamp_off()
     return redirect(url_for('dashboard'))
 

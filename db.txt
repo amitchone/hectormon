@@ -21,3 +21,12 @@ DESCRIBE sensordata;
 | uv        | int(2)    | YES  |     | NULL              |                |
 | timestamp | timestamp | NO   |     | CURRENT_TIMESTAMP |                |
 +-----------+-----------+------+-----+-------------------+----------------+
+
+DESCRIBE lamptimes;
++-----------+------------+------+-----+-------------------+----------------+
+| Field     | Type       | Null | Key | Default           | Extra          |
++-----------+------------+------+-----+-------------------+----------------+
+| id        | int(11)    | NO   | PRI | NULL              | auto_increment |
+| status    | varchar(3) | YES  |     | NULL              |                |
+| timestamp | timestamp  | NO   |     | CURRENT_TIMESTAMP |                |
++-----------+------------+------+-----+-------------------+----------------+
