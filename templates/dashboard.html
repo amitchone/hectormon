@@ -8,6 +8,10 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-3">
+          <div class="{{ session.lamp_div }}" role="alert">
+            <p><b>Lamp:</b> {{ session.lamp }}</p>
+            <p><b>Turned {{session.lamp}}:</b> {{ session.lamp_time }}</p>
+          </div>
           <div class="{{ divs.ctemp }}" role="alert">
             <p><b>Cool Temp:</b> {{ environmentals.ctemp }}&deg;C</p>
           </div>

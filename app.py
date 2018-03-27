@@ -42,7 +42,9 @@ def is_logged_in(f):
 @app.route('/lamp_on')
 @is_logged_in
 def lamp_on():
-    print 'TURN ON'
+    session['lamp'] = 'On'
+    session['lamp_div'] = "alert alert-success"
+    session['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
     toggle_lamp_on()
     return redirect(url_for('dashboard'))
 
@@ -50,6 +52,9 @@ def lamp_on():
 @app.route('/lamp_off')
 @is_logged_in
 def lamp_off():
+    session['lamp'] = 'Off'
+    session['lamp_div'] = "alert alert-danger"
+    session['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
     toggle_lamp_off()
     return redirect(url_for('dashboard'))
 
@@ -93,7 +98,7 @@ def get_divs(Environmentals):
 @is_logged_in
 def dashboard():
     Environmentals = update_data()
-    Environmentals['timestamp'] = time.strftime("%b %d %Y %H:%M:%S", time.localtime())
+    Environmentals['timestamp'] = time.strftime("%d %b %Y %H:%M:%S", time.localtime())
     Divs = get_divs(Environmentals)
 
     if Environmentals['parity']:
