@@ -1,4 +1,4 @@
-import getpass, time
+import getpass, time, datetime
 
 from functools import wraps
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
@@ -42,12 +42,13 @@ def is_logged_in(f):
 @app.route('/lamp_on')
 @is_logged_in
 def lamp_on():
-    session['lamp'] = 'On'
-    session['lamp_div'] = "alert alert-success"
-    session['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
+    Lamp = dict()
+    Lamp['lamp'] = 'On'
+    Lamp['lamp_div'] = "alert alert-success"
+    Lamp['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
 
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO lamptimes(status) VALUES(%s);", [session['lamp']])
+    cur.execute("INSERT INTO lamptimes(status) VALUES(%s);", [Lamp['lamp']])
     mysql.connection.commit()
     cur.close()
 
@@ -58,12 +59,13 @@ def lamp_on():
 @app.route('/lamp_off')
 @is_logged_in
 def lamp_off():
-    session['lamp'] = 'Off'
-    session['lamp_div'] = "alert alert-danger"
-    session['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
+    Lamp = dict()
+    Lamp['lamp'] = 'Off'
+    Lamp['lamp_div'] = "alert alert-danger"
+    Lamp['lamp_time'] = time.strftime("%d %b %H:%M", time.localtime())
 
     cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO lamptimes(status) VALUES(%s);", [session['lamp']])
+    cur.execute("INSERT INTO lamptimes(status) VALUES(%s);", [Lamp['lamp']])
     mysql.connection.commit()
     cur.close()
 
@@ -113,15 +115,32 @@ def dashboard():
     Environmentals['timestamp'] = time.strftime("%d %b %Y %H:%M:%S", time.localtime())
     Divs = get_divs(Environmentals)
 
+    try:
+        Lamp['lamp']
+    except:
+        Lamp = dict()
+
+        cur = mysql.connection.cursor()
+        result = cur.execute("SELECT status, timestamp FROM lamptimes ORDER BY id DESC LIMIT 1;")
+        data = cur.fetchone()
+
+        Lamp['lamp'] = data['status']
+        Lamp['lamp_time'] = data['timestamp'].strftime("%d %b %H:%M")
+
+        if Lamp['lamp'] == 'On':
+            Lamp['lamp_div'] = "alert alert-success"
+        else:
+            Lamp['lamp_div'] = "alert alert-danger"
+
     if Environmentals['parity']:
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO sensordata(ctemp, htemp, chum, hhum, uv) VALUES(%s, %s, %s, %s, %s);", [Environmentals['ctemp'], Environmentals['htemp'], Environmentals['chum'], Environmentals['hhum'], Environmentals['uv']])
         mysql.connection.commit()
         cur.close()
-        return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
+        return render_template('dashboard.html', environmentals=Environmentals, divs=Divs, lamp=Lamp)
     else:
         flash('Unable to read from sensors. Refresh page and try again. If unsuccessful check sensor connection.', 'danger')
-        return render_template('dashboard.html', environmentals=Environmentals, divs=Divs)
+        return render_template('dashboard.html', environmentals=Environmentals, divs=Divs, lamp=Lamp)
 
 
 @app.route('/logout')
