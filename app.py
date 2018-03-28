@@ -190,4 +190,4 @@ class LoginForm(Form):
 
 if __name__ == '__main__':
     app.secret_key = '6hb4FGh7ja1sdd4'
-    app.run(host='192.168.0.15',port=80, debug=True)
+    app.run(host='192.168.0.15',port=80, debug=True, threaded=True)

@@ -19,28 +19,23 @@ def toggle_lamp_off():
         return False
 
 
-def picture():
-    try:
-        remove('static/images/image.jpg')
-    except:
-        pass
-
-    camera = picamera.PiCamera()
-    camera.capture('static/images/image.jpg')
-    camera.close()
-    del camera
-
-
 def update_data():
     try:
+        camera = picamera.PiCamera()
         remove('static/images/image.jpg')
     except:
         pass
 
-    camera = picamera.PiCamera()
-    camera.capture('static/images/image.jpg')
-    camera.close()
-    del camera
+    try:
+        camera.capture('static/images/image.jpg')
+        camera.close()
+    except:
+        pass
+
+    try:
+        del camera
+    except:
+        pass
 
     data = ser_read()
 
