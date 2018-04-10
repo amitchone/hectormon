@@ -1,4 +1,4 @@
-import picamera, time, serial, re
+import time, serial, re, traceback, picamera, os
 from energenie import switch_on, switch_off
 from os import remove
 
@@ -20,23 +20,35 @@ def toggle_lamp_off():
 
 
 def update_data():
-    try:
-        camera = picamera.PiCamera()
-        remove('static/images/image.jpg')
-    except:
-        pass
 
     try:
-        camera.capture('static/images/image.jpg')
         camera.close()
     except:
         pass
 
     try:
+        camera = picamera.PiCamera()
+        remove('static/images/image.jpg')
+    except:
+        print traceback.format_exc()
+
+    try:
+        camera.capture('static/images/image.jpg')
+        camera.close()
+    except:
+        print traceback.format_exc()
+
+    try:
         del camera
     except:
-        pass
+        print traceback.format_exc()
 
+    '''
+    try:
+        os.system('raspistill -o /static/images/image.jpg')
+    except:
+        print traceback.format_exc()
+    '''
     data = ser_read()
 
     if data:
@@ -50,7 +62,11 @@ def temp_regex(temps):
         regex = re.search("^(\d{2}[.]\d{2})$", temp)
 
         if regex is None:
-            return False
+            regex2 = re.search("^(\d{1}[.]\d{2})$", temp)
+
+            if regex2 is None:
+                print 'SENSOR READ ERROR: {0}'.format(temps)
+                return False
 
     return True
 

@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<p></p>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6">
+      <body class="text-center">
+        <h1>Log Hector's weight</h1>
+        {% from "includes/_formhelpers.html" import render_field %}
+        <form method="POST" action="">
+          <div class="form-group">
+            {{ render_field(form.weight, class_="form-control") }}
+          </div>
+          <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+        </form>
+      </body>
+    </div>
+    <div class="col-sm-3">
+    </div>
+  </div>
+</div>
+
+<p></p>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6">
+      <body class="text-center">
+        <h1>Search weights</h1>
+        {% from "includes/_formhelpers.html" import render_field %}
+        <form method="POST" action="">
+          <div class="form-group">
+            {{ render_field(search.fromdate, class_="form-control") }}
+            {{ render_field(search.todate, class_="form-control") }}
+          </div>
+          <p><input class="btn btn-primary" type="submit" value="Submit"></p>
+        </form>
+      </body>
+    </div>
+    <div class="col-sm-3">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-8">
+      {% if weights %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Weight (g)</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for weight in weights %}
+            <tr>
+              <th scope="row"> {{ weight.timestamp }} </th>
+              <td>{{ weight.weight }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+    <div class="col-sm-2">
+    </div>
+  </div>
+</div>
+{% endblock %}

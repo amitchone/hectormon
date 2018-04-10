@@ -30,3 +30,12 @@ DESCRIBE lamptimes;
 | status    | varchar(3) | YES  |     | NULL              |                |
 | timestamp | timestamp  | NO   |     | CURRENT_TIMESTAMP |                |
 +-----------+------------+------+-----+-------------------+----------------+
+
+DESCRIBE weight;
++-----------+-----------+------+-----+-------------------+----------------+
+| Field     | Type      | Null | Key | Default           | Extra          |
++-----------+-----------+------+-----+-------------------+----------------+
+| id        | int(11)   | NO   | PRI | NULL              | auto_increment |
+| weight    | int(7)    | YES  |     | NULL              |                |
+| timestamp | timestamp | NO   |     | CURRENT_TIMESTAMP |                |
++-----------+-----------+------+-----+-------------------+----------------+

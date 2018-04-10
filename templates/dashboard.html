@@ -7,36 +7,46 @@
     <p></p>
     <div class="container">
       <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-12">
+          <img src="{{url_for('static', filename='images/image.jpg')}}" class="img-fluid mx-auto d-block">
+        </div>
+      </div>
+      <p>&nbsp;</p>
+      <div class="row">
+        <div class="col-sm-4">
           <div class="{{ lamp.lamp_div }}" role="alert">
-            <p><b>Lamp:</b> {{ lamp.lamp }}</p>
-            <p><b>Turned {{lamp.lamp}}:</b> {{ lamp.lamp_time }}</p>
-          </div>
-          <div class="{{ divs.ctemp }}" role="alert">
-            <p><b>Cool Temp:</b> {{ environmentals.ctemp }}&deg;C</p>
-          </div>
-          <div class="{{ divs.htemp }}" role="alert">
-            <p><b>Basking Temp:</b> {{ environmentals.htemp }}&deg;C</p>
+            <p><b>Lamp Turned {{ lamp.lamp }}:</b> {{ lamp.lamp_time }}</p>
           </div>
           <div class="{{ divs.uv }}" role="alert">
             <p><b>UV Index:</b> {{ environmentals.uv }}</p>
           </div>
-          <div class="{{ divs.chum }}" role="alert">
-            <p><b>Cool Humidity:</b> {{ environmentals.chum }}%</p>
+        </div>
+        <div class="col-sm-4">
+          <div class="{{ divs.htemp }}" role="alert">
+            <p><b>Basking Temp:</b> {{ environmentals.htemp }}&deg;C</p>
           </div>
+          <div class="{{ divs.ctemp }}" role="alert">
+            <p><b>Cool Temp:</b> {{ environmentals.ctemp }}&deg;C</p>
+          </div>
+        </div>
+        <div class="col-sm-4">
           <div class="{{ divs.hhum }}" role="alert">
             <p><b>Basking Humidity:</b> {{ environmentals.hhum }}%</p>
           </div>
-          <div class="text-center">
-            <a class="btn btn-primary" href="{{url_for('update')}}">Update Data</a>
-            <p></p>
-            <a class="btn btn-primary" href="{{url_for('lamp_on')}}">Lamp On</a>
-            <p></p>
-            <a class="btn btn-primary" href="{{url_for('lamp_off')}}">Lamp Off</a>
+          <div class="{{ divs.chum }}" role="alert">
+            <p><b>Cool Humidity:</b> {{ environmentals.chum }}%</p>
           </div>
         </div>
-        <div class="col-sm-9">
-          <img src="{{url_for('static', filename='images/image.jpg')}}" class="img-fluid mx-auto d-block">
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+            <a class="btn btn-primary" href="{{url_for('lamp_on')}}">Lamp On</a>
+        </div>
+        <div class="col-sm-4">
+            <a class="btn btn-primary" href="{{url_for('lamp_off')}}">Lamp Off</a>
+        </div>
+        <div class="col-sm-4">
+            <a class="btn btn-primary" href="{{url_for('update')}}">Update Data</a>
         </div>
       </div>
     </div>

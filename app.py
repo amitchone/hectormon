@@ -1,9 +1,10 @@
 import getpass, time, datetime
 
 from functools import wraps
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, Response
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, PasswordField, validators
+from wtforms.fields.html5 import DateField
 from passlib.hash import sha256_crypt
 from sensors import toggle_lamp_on, toggle_lamp_off, update_data
 
@@ -55,6 +56,39 @@ def lamp_on():
     toggle_lamp_on()
     return redirect(url_for('dashboard'))
 
+'''
+def gen():
+    while True:
+        try:
+            camera = picamera.PiCamera()
+        except:
+            pass
+
+        try:
+            camera.capture('static/images/image.jpg')
+        except:
+            pass
+
+        try:
+            camera.close()
+        except:
+            pass
+
+        try:
+            del camera
+        except:
+            pass
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + open('static/images/image.jpg', 'rb').read() + b'\r\n')
+
+        time.sleep(1)
+
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+'''
 
 @app.route('/lamp_off')
 @is_logged_in
@@ -106,6 +140,53 @@ def get_divs(Environmentals):
                  'hhum': "alert alert-danger",
                  'uv': "alert alert-danger"
                }
+
+
+@app.route('/weight', methods=['POST', 'GET'])
+@is_logged_in
+def weight():
+    weights = None
+    form = WeightForm(request.form)
+    search = WeightSearchForm(request.form)
+
+    if request.method == 'POST':
+        weight = request.form.get('weight')
+
+        if weight is not None:
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO weight(weight) VALUES(%s);", [weight])
+            mysql.connection.commit()
+            cur.close()
+
+            flash('Successfully logged weight!', 'success')
+
+    if request.method == 'POST' and search.fromdate.data is not None and search.todate.data is not None:
+        fromdate = search.fromdate.data.strftime('%Y-%m-%d')
+        todate = search.todate.data.strftime('%Y-%m-%d')
+
+        cur = mysql.connection.cursor()
+
+        if fromdate == todate:
+            fromtime = "{0} 00:00:00".format(fromdate)
+            totime = "{0} 23:59:59".format(todate)
+            result = cur.execute("SELECT * FROM weight WHERE timestamp BETWEEN (%s) AND (%s);", [fromtime, totime])
+        else:
+            result = cur.execute("SELECT * FROM weight WHERE timestamp BETWEEN (%s) AND (%s);", [fromdate, todate])
+        data = cur.fetchall()
+
+        if len(data) > 0:
+            weights = list()
+            for d in data:
+                weights.append({'timestamp': d['timestamp'].strftime('%d %b %Y'), 'weight': d['weight']})
+
+            flash('{0} records found!'.format(len(weights)), 'success')
+        else:
+            weights = None
+            flash('No records found!', 'danger')
+
+        cur.close()
+
+    return render_template('weight.html', form=form, search=search, weights=weights)
 
 
 @app.route('/')
@@ -188,6 +269,15 @@ class LoginForm(Form):
     password = PasswordField('Password', [validators.DataRequired()])
 
 
+class WeightForm(Form):
+    weight = StringField('Weight (g)')
+
+
+class WeightSearchForm(Form):
+    fromdate = DateField('From:', format='%Y-%m-%d')
+    todate = DateField('To:', format='%Y-%m-%d')
+
+
 if __name__ == '__main__':
     app.secret_key = '6hb4FGh7ja1sdd4'
-    app.run(host='192.168.0.15',port=80, debug=True, threaded=True)
+    app.run(host='192.168.0.15', port=80, debug=True, threaded=True)
